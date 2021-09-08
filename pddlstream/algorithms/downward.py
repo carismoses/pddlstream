@@ -567,8 +567,15 @@ def get_action_instances(task, action_plan):
     type_to_objects = instantiate.get_objects_by_type(task.objects, task.types)
     function_assignments = get_function_assignments(task)
     predicate_to_atoms = instantiate.get_atoms_by_predicate(task.init)
-    fluent_facts = MockSet()
-    init_facts = set()
+    #fluent_facts = MockSet()
+    #init_facts = set()
+    import instantiate as inst
+    import pddl_to_prolog
+    import build_model
+    prog = pddl_to_prolog.translate(task)
+    model = build_model.compute_model(prog)
+    fluent_facts = inst.get_fluent_facts(task, model)
+    init_facts = set(task.init)
     action_instances = []
     for name, objects in action_plan:
         # TODO: what if more than one action of the same name due to normalization?
@@ -577,8 +584,9 @@ def get_action_instances(task, action_plan):
         action = find_unique(lambda a: a.name == name, task.actions)
         args = list(map(pddl_from_object, objects))
         variable_mapping = {p.name: a for p, a in safe_zip(action.parameters, args)}
-        instance = action.instantiate(variable_mapping, init_facts, fluent_facts, type_to_objects,
-                                      task.use_min_cost_metric, function_assignments, predicate_to_atoms)
+        instance = action.instantiate(variable_mapping, init_facts, function_assignments,
+                                        fluent_facts, type_to_objects, task.use_min_cost_metric,
+                                        predicate_to_atoms)
         assert (instance is not None)
         action_instances.append(instance)
     return action_instances
