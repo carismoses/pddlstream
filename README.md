@@ -41,7 +41,7 @@ Most notably, it adheres to PDDL conventions and syntax whenever possible and co
 
 <!--$ git clone --recursive --branch main https://github.com/caelan/pddlstream.git-->
 ```
-$ git clone --recursive --branch main git@github.com:caelan/pddlstream.git
+$ git clone --recursive --branch main git@github.com:carismoses/pddlstream.git
 $ cd pddlstream
 pddlstream$ git submodule update --init --recursive
 pddlstream$ ./downward/build.py
