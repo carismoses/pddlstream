@@ -126,7 +126,7 @@ def solve_abstract(problem, constraints=PlanConstraints(), stream_info={}, repla
     evaluations, goal_exp, domain, externals = parse_problem(
         problem, stream_info=stream_info, constraints=constraints,
         unit_costs=unit_costs, unit_efforts=unit_efforts)
-    identify_non_producers(externals)
+    #identify_non_producers(externals)
     enforce_simultaneous(domain, externals)
     compile_fluent_streams(domain, externals)
     # TODO: make effort_weight be a function of the current cost
