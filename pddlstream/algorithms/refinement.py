@@ -20,6 +20,7 @@ from pddlstream.utils import INF, safe_zip, get_mapping, implies, elapsed_time
 CONSTRAIN_STREAMS = False
 CONSTRAIN_PLANS = False
 MAX_DEPTH = INF # 1 | INF
+MAX_ATTEMPTS = 10
 
 def is_refined(stream_plan):
     # TODO: lazily expand the shared objects in some cases to prevent increase in size
@@ -207,6 +208,10 @@ def iterative_plan_streams(all_evaluations, externals, optimistic_solve_fn, comp
         if is_plan(action_plan):
             return OptSolution(stream_plan, action_plan, cost)
         if final_depth == 0:
+            status = INFEASIBLE if exhausted else FAILED
+            return OptSolution(status, status, cost)
+        if num_iterations > MAX_ATTEMPTS:
+            print('Reached max attempts!')
             status = INFEASIBLE if exhausted else FAILED
             return OptSolution(status, status, cost)
     # TODO: should streams along the sampled path automatically have no optimistic value
